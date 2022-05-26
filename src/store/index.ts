@@ -1,6 +1,6 @@
-import { createStore } from 'vuex'
+import { createStore, Store, useStore as vuexUseStore } from 'vuex'
 
-import { IRootType } from './type'
+import { IRootType, IStoreType } from './type'
 import loginModule from './login/login'
 
 const store = createStore<IRootType>({
@@ -18,6 +18,11 @@ const store = createStore<IRootType>({
 // 初始化store
 export function setupStore() {
   store.dispatch('loginModule/LoadLocalDataAction')
+}
+
+// store类型
+export function useStore(): Store<IStoreType> {
+  return vuexUseStore()
 }
 
 export default store

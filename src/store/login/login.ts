@@ -4,6 +4,7 @@ import { ILoginType } from './types'
 import { IAccount } from '@/service/login/type'
 import cache from '@/utils/cache'
 import router from '@/router'
+import { mapMenusToRoutes } from '@/utils/map-menus'
 import {
   accountLoginReq,
   qryUserInfoById,
@@ -28,6 +29,11 @@ const loginModule: Module<ILoginType, IRootType> = {
     },
     changeMenuInfo(state, menuInfo: any) {
       state.menuInfo = menuInfo
+
+      const routes = mapMenusToRoutes(state.menuInfo)
+      routes.forEach((route) => {
+        router.addRoute('main', route)
+      })
     }
   },
   actions: {
@@ -66,11 +72,11 @@ const loginModule: Module<ILoginType, IRootType> = {
       if (menuInfo) {
         commit('changeMenuInfo', menuInfo)
       }
-    },
-
-    phoneLoginAction({ commit }, payload: any) {
-      console.log('执行手机号登录的action', payload)
     }
+
+    // phoneLoginAction({ commit }, payload: any) {
+    //   console.log('执行手机号登录的action', payload)
+    // }
   }
 }
 
