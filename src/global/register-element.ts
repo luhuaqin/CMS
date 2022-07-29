@@ -26,7 +26,10 @@ import {
   ElSelect,
   ElSubMenu,
   ElTabPane,
-  ElTabs
+  ElTabs,
+  ElTable,
+  ElTableColumn,
+  ElTag
 } from 'element-plus'
 import {
   Iphone,
@@ -67,6 +70,9 @@ const components = [
   ElMenuItemGroup,
   ElMenuItem,
   ElSubMenu,
+  ElTable,
+  ElTableColumn,
+  ElTag,
   Document,
   Setting,
   Monitor,

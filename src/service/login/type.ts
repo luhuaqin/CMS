@@ -8,8 +8,3 @@ export interface ILoginResult {
   token: ''
   name: ''
 }
-
-export interface IDataType<T = any> {
-  code: number
-  data: T
-}
