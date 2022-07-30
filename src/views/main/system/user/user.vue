@@ -10,10 +10,12 @@
           </el-tag>
         </template>
         <template #createAt="scope">
-          {{ moment(scope.row.createAt).format('YY/MM/DD hh:mm') }}
+          {{ $filters.formatTime(scope.row.createAt) }}
+          <!-- {{ moment(scope.row.createAt).format('YY/MM/DD hh:mm') }} -->
         </template>
         <template #updateAt="scope">
-          {{ moment(scope.row.updateAt).format('YY/MM/DD hh:mm') }}
+          {{ $filters.formatTime(scope.row.updateAt) }}
+          <!-- {{ moment(scope.row.updateAt).format('YY/MM/DD hh:mm') }} -->
         </template>
       </hq-table>
     </div>
@@ -26,7 +28,6 @@ import { configSearchForm } from './config/search-form-config'
 import PageSearch from '@/components/page-search/index'
 import { useStore } from '@/store'
 import HqTable from '@/base-ui/table'
-import moment from 'moment'
 
 export default defineComponent({
   name: 'user',
@@ -71,8 +72,7 @@ export default defineComponent({
       configSearchForm,
       userList,
       userCount,
-      propList,
-      moment
+      propList
     }
   }
 })
