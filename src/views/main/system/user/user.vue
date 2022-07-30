@@ -2,23 +2,8 @@
   <div class="user">
     <page-search :configSearchForm="configSearchForm" />
 
-    <div class="content">
-      <hq-table :listData="userList" :propList="propList">
-        <template #status="scope">
-          <el-tag :type="scope.row.enable ? 'success' : 'danger'">
-            {{ scope.row.enable ? '启用' : '禁用' }}
-          </el-tag>
-        </template>
-        <template #createAt="scope">
-          {{ $filters.formatTime(scope.row.createAt) }}
-          <!-- {{ moment(scope.row.createAt).format('YY/MM/DD hh:mm') }} -->
-        </template>
-        <template #updateAt="scope">
-          {{ $filters.formatTime(scope.row.updateAt) }}
-          <!-- {{ moment(scope.row.updateAt).format('YY/MM/DD hh:mm') }} -->
-        </template>
-      </hq-table>
-    </div>
+    <page-content :userList="userList" :configTableData="configTableData">
+    </page-content>
   </div>
 </template>
 
@@ -27,13 +12,14 @@ import { computed, defineComponent } from 'vue'
 import { configSearchForm } from './config/search-form-config'
 import PageSearch from '@/components/page-search/index'
 import { useStore } from '@/store'
-import HqTable from '@/base-ui/table'
+import PageContent from '@/components/page-content/index'
+import { configTableData } from './config/content-table-config'
 
 export default defineComponent({
   name: 'user',
   components: {
     PageSearch,
-    HqTable
+    PageContent
   },
   setup() {
     const store = useStore()
@@ -45,34 +31,19 @@ export default defineComponent({
       }
     })
 
-    const userList = computed(() => store.state.systemModule.userList)
-    const userCount = computed(() => store.state.systemModule.userCount)
+    const userList = computed(() => store.state.systemModule.userList) // 表格数据
+    const userCount = computed(() => store.state.systemModule.userCount) // 列表数据总数
 
-    const propList = [
-      { prop: 'name', label: '用户名', minWidth: 100 },
-      { prop: 'realname', label: '真实姓名', minWidth: 100 },
-      { prop: 'cellphone', label: '电话号码', minWidth: 100 },
-      {
-        prop: 'createAt',
-        label: '创建时间',
-        minWidth: 100,
-        slotName: 'createAt'
-      },
-      {
-        prop: 'updateAt',
-        label: '更新时间',
-        minWidth: 100,
-        slotName: 'updateAt'
-      },
-      { prop: 'enable', label: '状态', minWidth: 100, slotName: 'status' },
-      { prop: 'departmentId', label: '部门', minWidth: 100 }
-    ]
+    const selectionList = (list: any) => {
+      console.log(list)
+    }
 
     return {
       configSearchForm,
       userList,
       userCount,
-      propList
+      selectionList,
+      configTableData
     }
   }
 })
