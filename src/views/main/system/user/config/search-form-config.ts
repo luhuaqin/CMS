@@ -9,40 +9,48 @@ export const configSearchForm: IForm = {
   formItems: [
     {
       type: 'input',
+      label: 'id',
+      field: 'id',
+      placeholder: '请输入id'
+    },
+    {
+      type: 'input',
       label: '用户名',
       field: 'userName',
       placeholder: '请输入用户名'
     },
     {
-      type: 'password',
-      label: '密码',
-      field: 'password',
-      placeholder: '请输入密码'
+      type: 'input',
+      label: '真实姓名',
+      field: 'realname',
+      placeholder: '请输入真实姓名'
+    },
+    {
+      type: 'input',
+      label: '电话号码',
+      field: 'cellphone',
+      placeholder: '请输入电话号码'
     },
     {
       type: 'select',
-      label: '爱好',
-      field: 'hobbit',
-      placeholder: '请选择爱好',
+      label: '用户状态',
+      field: 'enable',
+      placeholder: '请选择用户状态',
       options: [
         {
-          label: '足球',
-          value: '足球'
+          label: '启用',
+          value: 1
         },
         {
-          label: '篮球',
-          value: '篮球'
-        },
-        {
-          label: '乒乓球',
-          value: '乒乓球'
+          label: '禁用',
+          value: 0
         }
       ]
     },
     {
       type: 'datepicker',
       label: '时间段',
-      field: 'rangeTime',
+      field: 'createAt',
       otherOpts: {
         type: 'daterange',
         startPlaceholder: '开始时间',

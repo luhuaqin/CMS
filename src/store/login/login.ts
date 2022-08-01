@@ -4,7 +4,7 @@ import { ILoginType } from './types'
 import { IAccount } from '@/service/login/type'
 import cache from '@/utils/cache'
 import router from '@/router'
-import { mapMenusToRoutes } from '@/utils/map-menus'
+import { mapMenusToRoutes, mapMenusToPermission } from '@/utils/map-menus'
 import {
   accountLoginReq,
   qryUserInfoById,
@@ -17,7 +17,8 @@ const loginModule: Module<ILoginType, IRootType> = {
     return {
       token: '',
       userInfo: {},
-      menuInfo: []
+      menuInfo: [],
+      permissions: []
     }
   },
   mutations: {
@@ -34,6 +35,10 @@ const loginModule: Module<ILoginType, IRootType> = {
       routes.forEach((route) => {
         router.addRoute('main', route)
       })
+
+      // 获取用户按钮权限
+      const permissions = mapMenusToPermission(menuInfo)
+      state.permissions = permissions
     }
   },
   actions: {

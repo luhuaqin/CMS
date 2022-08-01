@@ -11,6 +11,7 @@
       </slot>
     </div>
     <el-table
+      v-bind="childrenProps"
       :data="listData"
       border
       style="width: 100%"
@@ -39,14 +40,14 @@
         </el-table-column>
       </template>
     </el-table>
-    <div class="footer">
+    <div v-if="showFooter" class="footer">
       <slot name="footer">
         <el-pagination
-          :current-page="currentPage"
-          :page-size="100"
-          :page-sizes="[100, 200, 300, 400]"
+          :current-page="page.currentPage"
+          :page-size="page.pageSize"
+          :page-sizes="[10, 20, 30, 40]"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="400"
+          :total="listCount"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
         />
@@ -56,7 +57,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   props: {
@@ -76,26 +77,40 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
+    showFooter: {
+      type: Boolean,
+      default: true
+    },
     title: {
       type: String,
       default: ''
+    },
+    listCount: {
+      type: Number,
+      default: 0
+    },
+    page: {
+      type: Object,
+      default: () => ({ currentPage: 1, pageSize: 10 })
+    },
+    childrenProps: {
+      type: Object,
+      default: () => ({})
     }
   },
-  emits: ['selectionChange'],
+  emits: ['selectionChange', 'update:page'],
   setup(props, { emit }) {
     const handleSelectionChange = (value: any) => {
       emit('selectionChange', value)
     }
-    const currentPage = ref(4)
-    const handleSizeChange = () => {
-      console.log(111)
+    const handleSizeChange = (pageSize: number) => {
+      emit('update:page', { ...props.page, pageSize })
     }
-    const handleCurrentChange = () => {
-      console.log(111)
+    const handleCurrentChange = (currentPage: number) => {
+      emit('update:page', { ...props.page, currentPage })
     }
     return {
       handleSelectionChange,
-      currentPage,
       handleSizeChange,
       handleCurrentChange
     }
@@ -118,5 +133,12 @@ export default defineComponent({
   .handler {
     align-items: center;
   }
+}
+.footer {
+  display: flex;
+  height: 45px;
+  padding: 0 5px;
+  justify-content: end;
+  align-items: center;
 }
 </style>

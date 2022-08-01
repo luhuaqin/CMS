@@ -10,17 +10,17 @@
         <h5>检索条件</h5>
       </template> -->
       <template #formFooter>
-        <el-button type="primary" plain>
+        <el-button type="primary" plain @click="handleQuery">
           <el-icon style="vertical-align: middle">
             <Search />
           </el-icon>
           查询
         </el-button>
-        <el-button type="success" plain>
+        <el-button type="success" plain @click="handleReset">
           <el-icon style="vertical-align: middle">
             <Refresh />
           </el-icon>
-          刷新
+          重置
         </el-button>
       </template>
     </hq-form>
@@ -41,16 +41,32 @@ export default defineComponent({
       required: true
     }
   },
-  setup() {
-    const formData = ref({
-      userName: '',
-      password: '',
-      hobbit: '',
-      rangeTime: ''
-    })
+  emits: ['resetBtnClick', 'queryBtnClick'],
+  setup(props, { emit }) {
+    // eslint-disable-next-line vue/no-setup-props-destructure
+    const formItems = props.configSearchForm?.formItems
+    const formOriginData: any = {}
+    for (const item of formItems) {
+      formOriginData[item.field] = ''
+    }
+
+    const formData = ref(formOriginData)
+
+    const handleReset = () => {
+      for (const key in formOriginData) {
+        formData.value[`${key}`] = formOriginData[key]
+      }
+      emit('resetBtnClick')
+    }
+
+    const handleQuery = () => {
+      emit('queryBtnClick', formData.value)
+    }
 
     return {
-      formData
+      formData,
+      handleReset,
+      handleQuery
     }
   }
 })

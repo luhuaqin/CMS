@@ -2,12 +2,14 @@
   <div class="pageContent">
     <hq-table
       v-bind="configTableData"
-      :listData="userList"
+      :listCount="dataCount"
+      :listData="tableList"
+      v-model:page="pageInfo"
       @selectionChange="selectionList"
     >
       <!-- header插槽 -->
       <template #headerHandler>
-        <el-button type="primary">
+        <el-button v-if="isCreate" type="primary">
           <el-icon size="14px">
             <Plus />
           </el-icon>
@@ -16,8 +18,10 @@
       </template>
       <!-- 列插槽 -->
       <template #status="scope">
-        <el-tag :type="scope.row.enable ? 'success' : 'danger'">
-          {{ scope.row.enable ? '启用' : '禁用' }}
+        <el-tag
+          :type="scope.row.enable || scope.row.status ? 'success' : 'danger'"
+        >
+          {{ scope.row.enable || scope.row.status ? '启用' : '禁用' }}
         </el-tag>
       </template>
       <template #createAt="scope">
@@ -29,45 +33,120 @@
         <!-- {{ moment(scope.row.updateAt).format('YY/MM/DD hh:mm') }} -->
       </template>
       <template #handler>
-        <el-button circle type="primary" size="small">
+        <el-button v-if="isUpdate" circle type="primary" size="small">
           <el-icon size="16px">
             <Edit />
           </el-icon>
         </el-button>
-        <el-button circle type="danger" size="small">
+        <el-button v-if="isDelete" circle type="danger" size="small">
           <el-icon size="16px">
             <Delete />
           </el-icon>
         </el-button>
         <!-- {{ moment(scope.row.updateAt).format('YY/MM/DD hh:mm') }} -->
       </template>
+
+      <!-- page-content剩余动态插槽 -->
+      <template
+        v-for="item in otherPropSlots"
+        :key="item.prop"
+        #[item.slotName]="scope"
+      >
+        <template v-if="item.slotName">
+          <slot :name="item.slotName" :row="scope.row"></slot>
+        </template>
+      </template>
     </hq-table>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, computed, ref, watch } from 'vue'
+import { useStore } from '@/store'
+import HqTable from '../../../base-ui/table/index'
+import { usePermission } from '../../../hooks/usePermission'
 
 export default defineComponent({
+  components: {
+    HqTable
+  },
   props: {
     configTableData: {
       type: Object,
-      require: true
+      required: true
     },
-    userList: {
-      type: Array,
-      require: true
+    pageName: {
+      type: String,
+      required: true
     }
   },
-  setup() {
+  setup(props) {
+    const store = useStore()
+    // 获取操作权限
+    const isCreate = usePermission(props.pageName, 'create')
+    const isUpdate = usePermission(props.pageName, 'update')
+    const isDelete = usePermission(props.pageName, 'delete')
+    const isQuery = usePermission(props.pageName, 'query')
+
+    const pageInfo = ref({ currentPage: 1, pageSize: 10 })
+    watch(pageInfo, () => getPageData())
+    // 发送网络请求
+    const getPageData = (queryInfo: any = {}) => {
+      if (!isQuery) return
+      store.dispatch('systemModule/getPageListAction', {
+        pageName: props.pageName,
+        queryInfo: {
+          offset:
+            (pageInfo.value.currentPage === 0
+              ? pageInfo.value.currentPage
+              : pageInfo.value.currentPage - 1) * pageInfo.value.pageSize,
+          size: pageInfo.value.pageSize,
+          ...queryInfo
+        }
+      })
+    }
+    getPageData()
+
+    // 从vuex中获取数据
+    const tableList = computed(() =>
+      store.getters[`systemModule/getPageTableDataList`](props.pageName)
+    )
+    const dataCount = computed(() =>
+      store.getters['systemModule/getPageTableDataCount'](props.pageName)
+    )
+
     const selectionList = (list: any) => {
       console.log(list)
     }
+
+    // 除去公共插槽
+    const otherPropSlots = props.configTableData.propList.filter(
+      (item: any) => {
+        if (item.slotName === 'status') return false
+        if (item.slotName === 'createAt') return false
+        if (item.slotName === 'updateAt') return false
+        if (item.slotName === 'handler') return false
+        return true
+      }
+    )
     return {
-      selectionList
+      selectionList,
+      getPageData,
+      tableList,
+      dataCount,
+      pageInfo,
+      otherPropSlots,
+      isCreate,
+      isUpdate,
+      isDelete
     }
   }
 })
 </script>
 
-<style scoped></style>
+<style scoped lang="less">
+.pageContent {
+  padding: 20px;
+  border-top: 20px solid #f5f5f5;
+}
+</style>
