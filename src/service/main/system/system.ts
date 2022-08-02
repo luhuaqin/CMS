@@ -7,3 +7,9 @@ export function getPageListData(url: string, queryInfo: any) {
     data: queryInfo
   })
 }
+
+export function deleteSingleDataById(url: string) {
+  return hqRequest.delete<IDataType>({
+    url
+  })
+}

@@ -1,7 +1,10 @@
 import { Module } from 'vuex'
 import { ISystemType } from './types'
 import { IRootType } from '@/store/type'
-import { getPageListData } from '@/service/main/system/system'
+import {
+  getPageListData,
+  deleteSingleDataById
+} from '@/service/main/system/system'
 const systemModule: Module<ISystemType, IRootType> = {
   namespaced: true,
   state() {
@@ -66,11 +69,26 @@ const systemModule: Module<ISystemType, IRootType> = {
       )
       // 将数据存储到state中
       const { list, totalCount } = pageResult.data
-      console.log(list)
       const changePageName =
         (pageName.slice(0, 1) as string).toUpperCase() + pageName.slice(1)
       commit(`change${changePageName}List`, list)
       commit(`change${changePageName}Count`, totalCount)
+    },
+
+    async deletePageSingleDataAction({ dispatch }, payload: any) {
+      // pageName => /users/:id
+      const { pageName, id } = payload
+      const pageUrl = `/${pageName}/${id}`
+      // 调用删除接口
+      await deleteSingleDataById(pageUrl)
+      // 重新请求table数据
+      dispatch('getPageListAction', {
+        pageName,
+        queryInfo: {
+          offset: 0,
+          size: 10
+        }
+      })
     }
   }
 }

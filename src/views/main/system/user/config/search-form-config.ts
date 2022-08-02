@@ -9,14 +9,8 @@ export const configSearchForm: IForm = {
   formItems: [
     {
       type: 'input',
-      label: 'id',
-      field: 'id',
-      placeholder: '请输入id'
-    },
-    {
-      type: 'input',
       label: '用户名',
-      field: 'userName',
+      field: 'name',
       placeholder: '请输入用户名'
     },
     {

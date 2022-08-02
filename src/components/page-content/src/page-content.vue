@@ -9,7 +9,7 @@
     >
       <!-- header插槽 -->
       <template #headerHandler>
-        <el-button v-if="isCreate" type="primary">
+        <el-button v-if="isCreate" type="primary" @click="handleAdd">
           <el-icon size="14px">
             <Plus />
           </el-icon>
@@ -32,17 +32,33 @@
         {{ $filters.formatTime(scope.row.updateAt) }}
         <!-- {{ moment(scope.row.updateAt).format('YY/MM/DD hh:mm') }} -->
       </template>
-      <template #handler>
-        <el-button v-if="isUpdate" circle type="primary" size="small">
+      <template #handler="scope">
+        <el-button
+          v-if="isUpdate"
+          circle
+          type="primary"
+          size="small"
+          @click="handleEdit(scope.row)"
+        >
           <el-icon size="16px">
             <Edit />
           </el-icon>
         </el-button>
-        <el-button v-if="isDelete" circle type="danger" size="small">
-          <el-icon size="16px">
-            <Delete />
-          </el-icon>
-        </el-button>
+        <el-popconfirm title="您确认删除这条数据吗?">
+          <template #reference>
+            <el-button
+              v-if="isDelete"
+              circle
+              type="danger"
+              size="small"
+              @click="handleDelete(scope.row)"
+            >
+              <el-icon size="16px">
+                <Delete />
+              </el-icon>
+            </el-button>
+          </template>
+        </el-popconfirm>
         <!-- {{ moment(scope.row.updateAt).format('YY/MM/DD hh:mm') }} -->
       </template>
 
@@ -80,7 +96,8 @@ export default defineComponent({
       required: true
     }
   },
-  setup(props) {
+  emits: ['addBtnClick', 'editBtnClick'],
+  setup(props, { emit }) {
     const store = useStore()
     // 获取操作权限
     const isCreate = usePermission(props.pageName, 'create')
@@ -129,6 +146,21 @@ export default defineComponent({
         return true
       }
     )
+
+    // 删除/编辑/新建操作
+    const handleDelete = (row: any) => {
+      store.dispatch('systemModule/deletePageSingleDataAction', {
+        pageName: props.pageName,
+        id: row.id
+      })
+    }
+    const handleAdd = () => {
+      emit('addBtnClick')
+    }
+    const handleEdit = (row: any) => {
+      emit('editBtnClick', row)
+    }
+
     return {
       selectionList,
       getPageData,
@@ -138,7 +170,10 @@ export default defineComponent({
       otherPropSlots,
       isCreate,
       isUpdate,
-      isDelete
+      isDelete,
+      handleDelete,
+      handleAdd,
+      handleEdit
     }
   }
 })

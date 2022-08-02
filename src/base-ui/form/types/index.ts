@@ -7,7 +7,8 @@ export interface IFormType {
   rules?: any[]
   placeholder?: any
   options?: any[]
-  otherOpts?: any
+  otherOpts?: any // 针对特殊属性
+  isHidden?: boolean
 }
 
 export interface IForm {

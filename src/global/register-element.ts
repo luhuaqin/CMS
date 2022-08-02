@@ -31,7 +31,9 @@ import {
   ElTableColumn,
   ElTag,
   ElPagination,
-  ElImage
+  ElImage,
+  ElPopconfirm,
+  ElDialog
 } from 'element-plus'
 import {
   Iphone,
@@ -101,7 +103,9 @@ const components = [
   Delete,
   Plus,
   ElPagination,
-  ElImage
+  ElImage,
+  ElPopconfirm,
+  ElDialog
 ]
 
 export default function (app: App): void {
