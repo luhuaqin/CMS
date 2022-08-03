@@ -33,7 +33,8 @@ import {
   ElPagination,
   ElImage,
   ElPopconfirm,
-  ElDialog
+  ElDialog,
+  ElTree
 } from 'element-plus'
 import {
   Iphone,
@@ -105,7 +106,8 @@ const components = [
   ElPagination,
   ElImage,
   ElPopconfirm,
-  ElDialog
+  ElDialog,
+  ElTree
 ]
 
 export default function (app: App): void {

@@ -3,6 +3,7 @@ import { ISystemType } from './main/system/types'
 export interface IRootType {
   entireDepartment: any[]
   entireRole: any[]
+  entireMenu: any[]
 }
 
 export interface IRootWithModule {

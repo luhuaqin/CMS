@@ -13,7 +13,7 @@
           <el-icon size="14px">
             <Plus />
           </el-icon>
-          新建用户
+          新建{{ addBtnName }}
         </el-button>
       </template>
       <!-- 列插槽 -->
@@ -161,6 +161,20 @@ export default defineComponent({
       emit('editBtnClick', row)
     }
 
+    // 新建按钮文字
+    const addBtnName = computed(() => {
+      switch (props.pageName) {
+        case 'role':
+          return '角色'
+        case 'users':
+          return '用户'
+        case 'menu':
+          return '菜单'
+        default:
+          return ' '
+      }
+    })
+
     return {
       selectionList,
       getPageData,
@@ -173,7 +187,8 @@ export default defineComponent({
       isDelete,
       handleDelete,
       handleAdd,
-      handleEdit
+      handleEdit,
+      addBtnName
     }
   }
 })

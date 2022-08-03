@@ -3,7 +3,7 @@ import PageModal from '@/components/page-modal'
 
 type CallBackFn = () => void
 
-export function usePageModal(addCb: CallBackFn, editCb: CallBackFn) {
+export function usePageModal(addCb?: CallBackFn, editCb?: CallBackFn) {
   const pageModalRef = ref<InstanceType<typeof PageModal>>()
   const initInfo = ref({})
 
