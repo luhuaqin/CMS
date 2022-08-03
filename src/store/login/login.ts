@@ -42,12 +42,15 @@ const loginModule: Module<ILoginType, IRootType> = {
     }
   },
   actions: {
-    async accountLoginAction({ commit }, payload: IAccount) {
+    async accountLoginAction({ commit, dispatch }, payload: IAccount) {
       // 登录
       const accountLoginResult = await accountLoginReq(payload)
       const { token } = accountLoginResult.data
       commit('changeToken', token)
       cache.setCache('token', token)
+
+      // 发送初始化请求
+      dispatch('getInitialDataAction', null, { root: true })
 
       // 查询个人信息
       const userInfoResult = await qryUserInfoById(1)
@@ -64,10 +67,12 @@ const loginModule: Module<ILoginType, IRootType> = {
       router.push('/main')
     },
     // 刷新重新加载本地信息
-    LoadLocalDataAction({ commit }) {
+    LoadLocalDataAction({ commit, dispatch }) {
       const token = cache.getCache('token')
       if (token) {
         commit('changeToken', token)
+        // 发送初始化请求
+        dispatch('getInitialDataAction', null, { root: true })
       }
       const userInfo = cache.getCache('userInfo')
       if (userInfo) {

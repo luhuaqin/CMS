@@ -47,7 +47,7 @@ const store = createStore<IRootType>({
 // 初始化store
 export function setupStore() {
   store.dispatch('loginModule/LoadLocalDataAction')
-  store.dispatch('getInitialDataAction')
+  // store.dispatch('getInitialDataAction')  // 在这里发送初始化请求会导致未拿到token就执行该方法
 }
 
 // store类型

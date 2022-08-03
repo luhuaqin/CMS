@@ -19,7 +19,9 @@
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item>个人信息</el-dropdown-item>
-              <el-dropdown-item divided>退出登录</el-dropdown-item>
+              <el-dropdown-item divided @click="handleExit">
+                退出登录
+              </el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -33,7 +35,8 @@ import { defineComponent, ref, computed } from 'vue'
 import HqBreadCrumb from '@/base-ui/breadcrumb'
 import { pathMenuBreadcrumb } from '@/utils/map-menus'
 import { useStore } from '@/store'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import localCache from '@/utils/cache'
 
 export default defineComponent({
   emits: ['foldChange'],
@@ -55,10 +58,17 @@ export default defineComponent({
       return pathMenuBreadcrumb(menuInfo, currentPath)
     })
 
+    const router = useRouter()
+    const handleExit = () => {
+      localCache.deleteCache('token')
+      router.push('/main')
+    }
+
     return {
       handleFoldChange,
       isFold,
-      breadcrumbs
+      breadcrumbs,
+      handleExit
     }
   }
 })
