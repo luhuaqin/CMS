@@ -1,4 +1,6 @@
-export const modalConfig = {
+import { IForm } from '@/base-ui/form'
+
+export const modalConfig: IForm = {
   formItemList: [
     {
       type: 'input',
@@ -40,5 +42,6 @@ export const modalConfig = {
       options: []
     }
   ],
-  colLayout: { span: 24 }
+  colLayout: { span: 24 },
+  itemStyle: {}
 }

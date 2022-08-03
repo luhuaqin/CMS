@@ -17,13 +17,14 @@
     <page-modal
       :initInfo="initInfo"
       ref="pageModalRef"
-      :modalConfig="modalConfig"
+      pageName="users"
+      :modalConfig="modalConfigRef"
     ></page-modal>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 import { configSearchForm } from './config/search-form-config'
 import { configTableData } from './config/content-table-config'
 import { modalConfig } from './config/modal-config'
@@ -32,6 +33,7 @@ import { usePageModal } from '@/hooks/usePageModal'
 import PageSearch from '@/components/page-search/index'
 import PageContent from '@/components/page-content/index'
 import PageModal from '@/components/page-modal'
+import { useStore } from '@/store'
 
 export default defineComponent({
   name: 'users',
@@ -66,6 +68,23 @@ export default defineComponent({
     }
 
     // 动态添加部门和角色列表
+    const store = useStore()
+    const modalConfigRef = computed(() => {
+      const departmentItem = modalConfig.formItemList.find((item) => {
+        return item.field === 'departmentId'
+      })
+      departmentItem!.options = store.state.entireDepartment.map((item) => {
+        return { label: item.name, value: item.id }
+      })
+
+      const roleItem = modalConfig.formItemList.find((item) => {
+        return item.field === 'roleId'
+      })
+      roleItem!.options = store.state.entireRole.map((item) => {
+        return { label: item.name, value: item.id }
+      })
+      return modalConfig
+    })
 
     // 获取公共变量和函数
     const [pageModalRef, initInfo, handleAddData, handleEditData] =
@@ -78,7 +97,7 @@ export default defineComponent({
       handleResetBtnClick,
       handleQueryBtnClick,
       pageDataRef,
-      modalConfig,
+      modalConfigRef,
       handleAddData,
       handleEditData,
       pageModalRef,

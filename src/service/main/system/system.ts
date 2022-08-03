@@ -13,3 +13,17 @@ export function deleteSingleDataById(url: string) {
     url
   })
 }
+
+export function addPageData(url: string, newData: any) {
+  return hqRequest.post<IDataType>({
+    url,
+    data: newData
+  })
+}
+
+export function editPageData(url: string, editData: any) {
+  return hqRequest.patch<IDataType>({
+    url,
+    data: editData
+  })
+}

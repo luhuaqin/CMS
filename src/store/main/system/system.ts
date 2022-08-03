@@ -3,7 +3,9 @@ import { ISystemType } from './types'
 import { IRootType } from '@/store/type'
 import {
   getPageListData,
-  deleteSingleDataById
+  deleteSingleDataById,
+  addPageData,
+  editPageData
 } from '@/service/main/system/system'
 const systemModule: Module<ISystemType, IRootType> = {
   namespaced: true,
@@ -75,6 +77,7 @@ const systemModule: Module<ISystemType, IRootType> = {
       commit(`change${changePageName}Count`, totalCount)
     },
 
+    // 删除表格数据
     async deletePageSingleDataAction({ dispatch }, payload: any) {
       // pageName => /users/:id
       const { pageName, id } = payload
@@ -82,6 +85,34 @@ const systemModule: Module<ISystemType, IRootType> = {
       // 调用删除接口
       await deleteSingleDataById(pageUrl)
       // 重新请求table数据
+      dispatch('getPageListAction', {
+        pageName,
+        queryInfo: {
+          offset: 0,
+          size: 10
+        }
+      })
+    },
+    // 新建
+    async addPageDataAction({ dispatch }, payload: any) {
+      const { pageName, newData } = payload
+      const pageUrl = `/${pageName}`
+      await addPageData(pageUrl, newData)
+
+      dispatch('getPageListAction', {
+        pageName,
+        queryInfo: {
+          offset: 0,
+          size: 10
+        }
+      })
+    },
+    // 编辑
+    async editPageDataAction({ dispatch }, payload: any) {
+      const { pageName, editData, id } = payload
+      const pageUrl = `/${pageName}/${id}`
+      await editPageData(pageUrl, editData)
+
       dispatch('getPageListAction', {
         pageName,
         queryInfo: {

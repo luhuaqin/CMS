@@ -1,7 +1,7 @@
 <template>
   <div class="page-search">
     <hq-form
-      :formItemList="configSearchForm.formItems"
+      :formItemList="configSearchForm.formItemList"
       :labelWidth="configSearchForm.labelWidth"
       :itemLayout="configSearchForm.itemLayout"
       v-model="formData"
@@ -44,9 +44,9 @@ export default defineComponent({
   emits: ['resetBtnClick', 'queryBtnClick'],
   setup(props, { emit }) {
     // eslint-disable-next-line vue/no-setup-props-destructure
-    const formItems = props.configSearchForm?.formItems
+    const formItemList = props.configSearchForm?.formItemList
     const formOriginData: any = {}
-    for (const item of formItems) {
+    for (const item of formItemList) {
       formOriginData[item.field] = ''
     }
 

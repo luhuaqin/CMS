@@ -2,11 +2,11 @@ import { IForm } from '@/base-ui/form/types'
 
 export const configSearchForm: IForm = {
   labelWidth: '130px',
-  itemLayout: {
+  itemStyle: {
     padding: '20px 10px',
     marginBottom: 0
   },
-  formItems: [
+  formItemList: [
     {
       type: 'input',
       label: '用户名',
