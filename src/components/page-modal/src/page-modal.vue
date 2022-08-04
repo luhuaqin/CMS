@@ -40,6 +40,10 @@ export default defineComponent({
     pageName: {
       type: String,
       required: true
+    },
+    otherInfo: {
+      type: Object,
+      default: () => ({})
     }
   },
   setup(props) {
@@ -62,14 +66,14 @@ export default defineComponent({
         // 编辑
         store.dispatch('systemModule/editPageDataAction', {
           pageName: props.pageName,
-          editData: { ...formData.value },
+          editData: { ...formData.value, ...props.otherInfo },
           id: props.initInfo.id
         })
       } else {
         // 新建
         store.dispatch('systemModule/addPageDataAction', {
           pageName: props.pageName,
-          newData: { ...formData.value }
+          newData: { ...formData.value, ...props.otherInfo }
         })
       }
     }

@@ -44,15 +44,12 @@
             <Edit />
           </el-icon>
         </el-button>
-        <el-popconfirm title="您确认删除这条数据吗?">
+        <el-popconfirm
+          title="您确认删除这条数据吗?"
+          @confirm="handleDelete(scope.row)"
+        >
           <template #reference>
-            <el-button
-              v-if="isDelete"
-              circle
-              type="danger"
-              size="small"
-              @click="handleDelete(scope.row)"
-            >
+            <el-button v-if="isDelete" circle type="danger" size="small">
               <el-icon size="16px">
                 <Delete />
               </el-icon>
