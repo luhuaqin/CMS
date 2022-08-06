@@ -34,7 +34,8 @@ import {
   ElImage,
   ElPopconfirm,
   ElDialog,
-  ElTree
+  ElTree,
+  ElCard
 } from 'element-plus'
 import {
   Iphone,
@@ -107,7 +108,8 @@ const components = [
   ElImage,
   ElPopconfirm,
   ElDialog,
-  ElTree
+  ElTree,
+  ElCard
 ]
 
 export default function (app: App): void {
